@@ -11,7 +11,7 @@ classdef (InferiorClasses = {?sym}) LWE_Ciphertext
         % constructor
         function ct = LWE_Ciphertext(setup,A,b)
             arguments
-                setup {mustBeA(setup,'GSW')}
+                setup {mustBeA(setup,'Setup')}
                 A
                 b
             end
@@ -25,15 +25,6 @@ classdef (InferiorClasses = {?sym}) LWE_Ciphertext
             ctnew = ct;
             ctnew.A = vpa([]);
             ctnew.b = vpa([]);
-        end
-
-        % decryption
-        function me = Dec(ct,sk)
-            arguments
-                ct {mustBeA(ct,'LWE_Ciphertext')}
-                sk (:,1) {mustBeCoefficients(sk)}
-            end
-            me = Mod(ct.b+ct.A*sk,ct.q);
         end
 
         % computation

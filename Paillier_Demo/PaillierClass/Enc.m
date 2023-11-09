@@ -14,7 +14,7 @@ function ct = Enc(m,pk)
 end
 
 
-function encryption = EncScalar(m,pk,q)
+function ct = EncScalar(m,pk,q)
     % encryption routine for a scalar input
     r = vpa(floor(rand()*pk));
     while gcd(r,pk-1) ~= 1
@@ -23,5 +23,5 @@ function encryption = EncScalar(m,pk,q)
     tmp1 = Powermod(pk+1,m,q);
     tmp2 = Powermod(r,pk,q);       % slower than matlab's but necessary
     ct = mod(tmp1*tmp2,q);
-    encryption = Ciphertext(ct,pk,q);
+    ct = Ciphertext(ct,pk,q);
 end

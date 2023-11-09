@@ -4,7 +4,7 @@ function [x,u] = Dcd(z,s,q)
         s {mustBePositive}
         q {mustBeModulus(q)}
     end
-    u = floor(z/q+vpa(1/2));
+    u = round(z/q);
     y = z-u*q;
     x = y/s;
 end

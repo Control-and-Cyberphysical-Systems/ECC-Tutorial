@@ -4,5 +4,5 @@ function z = Ecd(x,s,q)
         s {mustBePositive}
         q {mustBeModulus(q)}
     end
-    z = mod(round(s*x),q);
+        z = Mod(round(s*x),q);
 end

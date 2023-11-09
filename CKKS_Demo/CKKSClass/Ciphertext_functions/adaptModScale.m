@@ -1,12 +1,9 @@
-function [a,b,adapt_mode] = adaptModScale(a,b,scaling)
+function [a,b] = adaptModScale(a,b,mode,scaling)
 % adapts the modulus or the scaling such that a,b are compatible
 % modreduce -> reduces modulus keeps scaling
 % rescale   -> reduces modulus and scaling
 
-mode = (strcmp(a.adapt,'auto') || strcmp(b.adapt,'auto'));
-
-if mode == 1 % adapt automatically
-    adapt_mode = 'auto';
+if mode == "auto"
     if strcmp(scaling,'increase')
         if a.q < b.q
             b = modreduce(b,a.q);
@@ -25,8 +22,7 @@ if mode == 1 % adapt automatically
             a = modreduce(a,b.q);
         end
     end
-elseif mode == 0 % adapt manually
-    adapt_mode = 'manual';
+elseif mode == "manual" % adapt manually
     if a.q ~= b.q
         error("incompatible moduli." + ...
             " use modulus reduce or set adapt to 'auto'")

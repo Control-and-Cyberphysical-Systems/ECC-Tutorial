@@ -1,6 +1,4 @@
 classdef CoefficientEncoder < dynamicprops
-    % Maps RingElement objects to Encoding objects supporting various methods
-    % for encoding the coefficients. This mainly represents the transition to Rq.
     properties (SetAccess = immutable)
         M    {mustBePositive,mustBeInteger} = []; % dimension
         type {mustBeEncodingType(type)}           % encoding type
@@ -56,9 +54,7 @@ classdef CoefficientEncoder < dynamicprops
         end
 
         function [m,m_vec,z_ecd] = encode(obj,z,s)
-            % Encode a RingElement object `z` into a Encoding object using the
-            % scaling factor `s`, encoding type specific transformations (if
-            % applicable), and subsequent rounding.
+            % Encode a RingElement object `z`
             arguments
                 obj
                 z {mustBeA(z,'RingElement')}
@@ -92,28 +88,25 @@ classdef CoefficientEncoder < dynamicprops
                     z_ecd = obj.CRTinv*lift;
                     m_vec = round(s*obj.CRTinv*lift);
             end
-            m = Encoding(m_vec,q,s,obj.type);
+            m = RingElement(m_vec,q);
         end
 
-        function [polynomial,coefficients,z_dcd] = decode(obj,m)
+        function [polynomial,coefficients,z_dcd] = decode(obj,m,s)
             % Decoding the Encoding object `m` to a corresponding RingElement object.
             arguments
                 obj
-                m {mustBeA(m,'Encoding')}
+                m
+                s {mustBeScalingFactor(s)}
             end
-            if ~strcmp(m.type,obj.type)
-                error('encoder and encoding do not share the same type')
-            end
-
             switch obj.type
                 case 'scalar'
                     if obj.M ~= m.N
-                        error('encoder and encoding do not share dimension')
+                        error('encoder and polynomial do not share dimension')
                     end
-                    coefficients = m.coefficients/m.s;
+                    coefficients = m.coefficients/s;
                 case 'packed'
                     z_dcd = obj.U*m.coefficients(:);
-                    coefficients = real(obj.U*m.coefficients(:)/m.s)';
+                    coefficients = real(obj.U*m.coefficients(:)/s)';
             end
            polynomial = RingElement(coefficients,m.q);
         end

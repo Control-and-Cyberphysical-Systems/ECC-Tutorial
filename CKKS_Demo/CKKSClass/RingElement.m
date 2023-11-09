@@ -9,6 +9,13 @@ classdef (InferiorClasses = {?sym}) RingElement
         N (1,1)                                      % ring dimension
     end
 
+    properties (Hidden)
+        % used for encoding
+        s                  
+        type
+        mode 
+    end
+
     methods
         % constructor
         function c = RingElement(coefficients,q,options)
@@ -294,16 +301,16 @@ classdef (InferiorClasses = {?sym}) RingElement
                 return
             else
                 d = c.N - 1;
-                s = cell(1,d);
+                a = cell(1,d);
                 ind = 1;
                 for i = 1:c.N
                     if first_digits(i) ~= 0
                         if ind ~= 1
                             if first_digits(i) > 0
-                                s(ind) = {' + '};
+                                a(ind) = {' + '};
                                 ind = ind + 1;
                             else
-                                s(ind) = {' - '};
+                                a(ind) = {' - '};
                                 first_digits(i) = -first_digits(i);
                                 ind = ind + 1;
                             end
@@ -311,39 +318,40 @@ classdef (InferiorClasses = {?sym}) RingElement
                         if first_digits(i) ~= 1 || d == 0
                             if first_digits(i) == -1
                                 if i == c.N
-                                    s(ind) = {'-1'};
+                                    a(ind) = {'-1'};
                                 else
-                                    s(ind) = {'-'};
+                                    a(ind) = {'-'};
                                 end
                                 ind = ind + 1;
                             else
                                 if divisors(i) ~= 0
-                                    s(ind)={append(num2str(first_digits(i)),'...')};
+                                    a(ind)={append(num2str(first_digits(i)),'...')};
                                 else
-                                    s(ind) = {num2str(first_digits(i))};
+                                    a(ind) = {num2str(first_digits(i))};
                                 end
                                 ind = ind + 1;
                                 if d > 0
-                                    s(ind) = {'*'};
+                                    a(ind) = {'*'};
                                     ind = ind + 1;
                                 end
                             end
                         end
                         if d >= 2
-                            s(ind) = {['X^' int2str(d)]};
+                            a(ind) = {['X^' int2str(d)]};
                             ind = ind + 1;
                         elseif d == 1
-                            s(ind) = {'X'};
+                            a(ind) = {'X'};
                             ind = ind + 1;
                         end
                     end
                     d = d - 1;
                 end
             end
-            disp([[s{:}],'  (mod q) (mod X^N+1)']);
+            disp([[a{:}],'  (mod q) (mod X^N+1)']);
         end
 
     end
+
 
     methods (Hidden)
         % input handling for computation

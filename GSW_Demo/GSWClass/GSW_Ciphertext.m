@@ -10,7 +10,7 @@ classdef (InferiorClasses = {?sym,?LWE_Ciphertext}) GSW_Ciphertext
         % constructor
         function ct = GSW_Ciphertext(setup,c)
             arguments
-                setup {mustBeA(setup,'GSW')}
+                setup {mustBeA(setup,'Setup')}
                 c
             end
             ct.c = c;
@@ -21,16 +21,6 @@ classdef (InferiorClasses = {?sym,?LWE_Ciphertext}) GSW_Ciphertext
         function ctnew = copyProperties(ct)
             ctnew = ct;
             ctnew.c = vpa([]);
-        end
-
-        % decryption
-        function me = Dec(ct,sk)
-            arguments
-                ct {mustBeA(ct,'GSW_Ciphertext')}
-                sk
-            end
-            % select one element  and decrypt
-            me = Mod(ct.c(1,:)*[1;sk],ct.q);
         end
 
         % computation
@@ -97,7 +87,7 @@ classdef (InferiorClasses = {?sym,?LWE_Ciphertext}) GSW_Ciphertext
                 if isa(a,'GSW_Ciphertext') && isa(b,'LWE_Ciphertext')
                     Db = Decomp(b);
                     if size(Db,2) ~= size(a.c{1,1},1) || ....
-                       size(Db,1) ~= size(a.c,1)
+                       size(Db,1) ~= size(a.c,2)
                         error('dimension error: ciphertexts not compatible')
                     end
                     for i = 1:size(a.c,1)

@@ -1,14 +1,13 @@
-function [y,u] = Mod(x,q)
-% symmetric modulus [-q/2,q/2)
+function [y,u] = Mod(z,q)
     arguments
-        x
+        z
         q {mustBeModulus(q)}
     end
-    if isa(x,'RingElement') || isa(x,'Encoding')
-        u = floor(x.coefficients/q+vpa(1/2));
-        y = x.coefficients-u*q;
+    if isa(z,'RingElement') || isa(z,'Encoding')
+        u = round(z.coefficients/q);
+        y = z.coefficients-u*q;
     else
-        u = floor(x/q+vpa(1/2));
-        y = x-u*q;
+        u = round(z/q);
+        y = z-u*q;
     end
 end
