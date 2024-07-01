@@ -1,3 +1,5 @@
+Note: This repository is for educational purposes and is not actively maintained.
+
 *Dependencies:* Matlab's symbolic toolbox is required
 
 # Paillier demo
